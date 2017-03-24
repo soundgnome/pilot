@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=1]
+[gd_scene load_steps=3 format=1]
 
 [ext_resource path="res://tilesets/stars.tres" type="TileSet" id=1]
+[ext_resource path="res://scripts/stars.gd" type="Script" id=2]
 
 [node name="Node" type="Node"]
 
@@ -21,5 +22,6 @@ collision/layers = 1
 collision/mask = 1
 occluder/light_mask = 1
 tile_data = IntArray( 131085, 0, 196611, 0, 196632, 1, 524303, 2, 589835, 2, 589843, 0, 786436, 1, 786446, 0, 917525, 1, 1048587, 1, 1048600, 2, 1769476, 0, 1835022, 1, 1835037, 0, 1900556, 1 )
+script/script = ExtResource( 2 )
 
 
