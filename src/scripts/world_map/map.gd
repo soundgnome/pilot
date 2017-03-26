@@ -1,13 +1,15 @@
 extends Node2D
 
-var boundaries
+var boundaries = CONFIG.map_boundaries
 var hex_lengths
-var pixel_offsets
+var pixel_offsets = CONFIG.map_offsets
+var stars = []
+
+
+func add_star(star):
+	self.stars.append(star)
 
 func _ready():
-	self.boundaries = CONFIG.map_boundaries
-	self.pixel_offsets = CONFIG.map_offsets
-
 	var size = CONFIG.hex_size
 	var side = size/sqrt(3)
 	self.hex_lengths = {
@@ -18,7 +20,13 @@ func _ready():
 		'rowheight': int(side*1.5),
 	}
 
+
 func _draw():
+	self._draw_stars()
+	self._draw_grid()
+
+
+func _draw_grid():
 	for x in range(self.boundaries[0], self.boundaries[2]):
 		if (x == 0):
 			for y in range(self.boundaries[1], self.boundaries[3]-1):
@@ -28,6 +36,22 @@ func _draw():
 			for y in range(self.boundaries[1], self.boundaries[3]-1):
 				self._draw_hex([x,y], [2,3,4])
 			self._draw_hex([x, self.boundaries[3]-1], [2,3,4,5,0])
+
+
+func _draw_hex(pos, sides):
+	var corners = self._get_hex_corners(pos)
+	for side in sides:
+		draw_line(corners[side], corners[(side+1)%6], CONFIG.grid_color)
+
+
+func _draw_star(star):
+	var center = self._pos_to_pixel(star['pos'])
+	self.draw_circle(Vector2(center[0], center[1]), CONFIG.star_sizes[star['type']], CONFIG.star_color)
+
+
+func _draw_stars():
+	for star in self.stars:
+		self._draw_star(star)
 
 
 func _get_hex_corners(pos):
@@ -52,11 +76,6 @@ func _get_hex_corners(pos):
 		Vector2(xs[2], ys[2]),
 	]
 	return corners
-
-func _draw_hex(pos, sides):
-	var corners = self._get_hex_corners(pos)
-	for side in sides:
-		draw_line(corners[side], corners[(side+1)%6], CONFIG.grid_color)
 
 
 func _pos_to_pixel(pos):
